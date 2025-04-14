@@ -23,7 +23,7 @@ class UtilityController extends Controller {
         date_default_timezone_set(get_option('timezone', 'Asia/Dhaka'));
     }
 
-    public function settings($store = '', Request $request) {
+    public function settings( Request $request, $store = '') {
         if ($store == '') {
             return view('backend.administration.general_settings.settings');
         } else {

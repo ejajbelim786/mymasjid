@@ -35,7 +35,9 @@
                                 </td>
                                 <td class="text-center">
                                     <button class="btn btn-info btn-sm editCategory" data-id="{{ $category->id }}">{{ _lang('Edit') }}</button>
+                                    @if(Auth::user()->is_subuser != 1)
                                     <button class="btn btn-danger btn-sm deleteCategory" data-id="{{ $category->id }}">{{ _lang('Delete') }}</button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

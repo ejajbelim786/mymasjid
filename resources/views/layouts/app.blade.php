@@ -219,10 +219,12 @@
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
 
+                        @if(Auth::user()->is_subuser != 1)
                         @if(Auth::user()->user_type == 'user' && get_option('membership_system') == 'enabled')
 
 							<a class="dropdown-item" href="{{ route('membership.extend') }}"><i class="ti-id-badge"></i> {{ _lang('Extend Membership') }}</a>
 
+						@endif
 						@endif
 
                         <a class="dropdown-item" href="{{ route('profile.index') }}"><i class="ti-user"></i>
@@ -244,11 +246,13 @@
                                 class="ti-panel"></i> {{ _lang('System Settings') }}</a>
 
                         @elseif(Auth::user()->user_type == 'user')   
-
+                        @if(Auth::user()->is_subuser != 1)
+                        
                         <a class="dropdown-item" href="{{ route('company.change_settings') }}"><i
 
                                 class="ti-settings"></i> {{ _lang('Company Settings') }}</a>
 
+                        @endif
                         @endif
 
                         <div class="dropdown-divider"></div>

@@ -6,6 +6,7 @@ use App\Transaction;
 use DataTables;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller {
 
@@ -40,25 +41,46 @@ class ExpenseController extends Controller {
             ->editColumn('expense_type.name', function ($trans) {
                 return isset($trans->expense_type->name) ? $trans->expense_type->name : _lang('Transfer');
             })
+            // ->addColumn('action', function ($trans) {
+            //     if (isset($trans->expense_type->name)) {
+            //         return '<form action="' . action('ExpenseController@destroy', $trans['id']) . '" class="text-center" method="post">'
+            //         . '<a href="' . action('ExpenseController@edit', $trans['id']) . '" data-title="' . _lang('Update Expense') . '" class="btn btn-warning btn-sm ajax-modal"><i class="ti-pencil-alt"></i></a> '
+            //         . '<a href="' . action('ExpenseController@show', $trans['id']) . '" data-title="' . _lang('View Expense') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
+            //         . csrf_field()
+            //         . '<input name="_method" type="hidden" value="DELETE">'
+            //         . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+            //             . '</form>';
+            //     } else {
+            //         return '<form action="' . action('ExpenseController@destroy', $trans['id']) . '" class="text-center" method="post">'
+            //         . '<a href="#" data-title="' . _lang('Update Expense') . '" class="btn btn-warning btn-sm disabled"><i class="ti-pencil-alt"></i></a> '
+            //         . '<a href="' . action('ExpenseController@show', $trans['id']) . '" data-title="' . _lang('View Expense') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
+            //         . csrf_field()
+            //         . '<input name="_method" type="hidden" value="DELETE">'
+            //         . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+            //             . '</form>';
+            //     }
+            // })
+
             ->addColumn('action', function ($trans) {
                 if (isset($trans->expense_type->name)) {
                     return '<form action="' . action('ExpenseController@destroy', $trans['id']) . '" class="text-center" method="post">'
-                    . '<a href="' . action('ExpenseController@edit', $trans['id']) . '" data-title="' . _lang('Update Expense') . '" class="btn btn-warning btn-sm ajax-modal"><i class="ti-pencil-alt"></i></a> '
-                    . '<a href="' . action('ExpenseController@show', $trans['id']) . '" data-title="' . _lang('View Expense') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
-                    . csrf_field()
-                    . '<input name="_method" type="hidden" value="DELETE">'
-                    . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+                        . '<a href="' . action('ExpenseController@edit', $trans['id']) . '" data-title="' . _lang('Update Expense') . '" class="btn btn-warning btn-sm ajax-modal"><i class="ti-pencil-alt"></i></a> '
+                        . '<a href="' . action('ExpenseController@show', $trans['id']) . '" data-title="' . _lang('View Expense') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
+                        . csrf_field()
+                        . '<input name="_method" type="hidden" value="DELETE">'
+                        . (Auth::user()->is_subuser != 1 ? '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>' : '')
                         . '</form>';
                 } else {
                     return '<form action="' . action('ExpenseController@destroy', $trans['id']) . '" class="text-center" method="post">'
-                    . '<a href="#" data-title="' . _lang('Update Expense') . '" class="btn btn-warning btn-sm disabled"><i class="ti-pencil-alt"></i></a> '
-                    . '<a href="' . action('ExpenseController@show', $trans['id']) . '" data-title="' . _lang('View Expense') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
-                    . csrf_field()
-                    . '<input name="_method" type="hidden" value="DELETE">'
-                    . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+                        . '<a href="#" data-title="' . _lang('Update Expense') . '" class="btn btn-warning btn-sm disabled"><i class="ti-pencil-alt"></i></a> '
+                        . '<a href="' . action('ExpenseController@show', $trans['id']) . '" data-title="' . _lang('View Expense') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
+                        . csrf_field()
+                        . '<input name="_method" type="hidden" value="DELETE">'
+                        . (Auth::user()->is_subuser != 1 ? '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>' : '')
                         . '</form>';
                 }
             })
+
             ->setRowId(function ($trans) {
                 return "row_" . $trans->id;
             })

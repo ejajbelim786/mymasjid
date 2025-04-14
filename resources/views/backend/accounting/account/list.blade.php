@@ -42,8 +42,10 @@
                                         class="btn btn-primary btn-sm ajax-modal"><i class="ti-eye"></i></a>
                                     {{ csrf_field() }}
                                     <input name="_method" type="hidden" value="DELETE">
+                                    @if(Auth::user()->is_subuser != 1)
                                     <button class="btn btn-danger btn-sm btn-remove"
                                         type="submit"><i class="ti-trash"></i></button>
+                                    @endif
                                 </form>
                             </td>
                         </tr>

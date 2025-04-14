@@ -176,12 +176,13 @@
                     </div>
                 </div>
             </div>
-
+            @if(Auth::user()->is_subuser != 1)
             <div class="card">
                 <div class="card-header">
                     <div class="togglebutton">
                         <h4 class="header-title d-flex align-items-center">{{ _lang('Login Details') }}&nbsp;&nbsp;
                             <input type="checkbox" id="client_login" value="1" name="client_login">
+                            <input type="hidden" id="is_subuser" value="1" name="is_subuser">
                         </h4>
                     </div>
                 </div>
@@ -228,6 +229,7 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
 
         <div class="col-md-12 mt-4">

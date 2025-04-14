@@ -29,7 +29,7 @@
     <nav class="sb-sidenav-menu-nested nav">
 
         <a class="nav-link" href="{{ route('contacts.index') }}">{{ _lang('Members List') }}</a>
-
+        
         <a class="nav-link" href="{{ route('contacts.create') }}">{{ _lang('Add New') }}</a>
 
         <a class="nav-link" href="{{ route('categories.index') }}">{{ _lang('Category') }}</a>

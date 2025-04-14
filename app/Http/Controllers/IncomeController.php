@@ -6,6 +6,7 @@ use App\Transaction;
 use DataTables;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 
 class IncomeController extends Controller {
 
@@ -40,25 +41,46 @@ class IncomeController extends Controller {
             ->editColumn('income_type.name', function ($trans) {
                 return isset($trans->income_type->name) ? $trans->income_type->name : _lang('Transfer');
             })
+            // ->addColumn('action', function ($trans) {
+            //     if (isset($trans->income_type->name)) {
+            //         return '<form action="' . action('IncomeController@destroy', $trans['id']) . '" class="text-center" method="post">'
+            //         . '<a href="' . action('IncomeController@edit', $trans['id']) . '" data-title="' . _lang('Update Income') . '" class="btn btn-warning btn-sm ajax-modal"><i class="ti-pencil-alt"></i></a> '
+            //         . '<a href="' . action('IncomeController@show', $trans['id']) . '" data-title="' . _lang('View Income') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
+            //         . csrf_field()
+            //         . '<input name="_method" type="hidden" value="DELETE">'
+            //         . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+            //             . '</form>';
+            //     } else {
+            //         return '<form action="' . action('IncomeController@destroy', $trans['id']) . '" class="text-center" method="post">'
+            //         . '<a href="#" data-title="' . _lang('Update Income') . '" class="btn btn-warning btn-sm disabled"><i class="ti-pencil-alt"></i></a> '
+            //         . '<a href="' . action('IncomeController@show', $trans['id']) . '" data-title="' . _lang('View Income') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
+            //         . csrf_field()
+            //         . '<input name="_method" type="hidden" value="DELETE">'
+            //         . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+            //             . '</form>';
+            //     }
+            // })
+
             ->addColumn('action', function ($trans) {
                 if (isset($trans->income_type->name)) {
                     return '<form action="' . action('IncomeController@destroy', $trans['id']) . '" class="text-center" method="post">'
-                    . '<a href="' . action('IncomeController@edit', $trans['id']) . '" data-title="' . _lang('Update Income') . '" class="btn btn-warning btn-sm ajax-modal"><i class="ti-pencil-alt"></i></a> '
-                    . '<a href="' . action('IncomeController@show', $trans['id']) . '" data-title="' . _lang('View Income') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
-                    . csrf_field()
-                    . '<input name="_method" type="hidden" value="DELETE">'
-                    . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+                        . '<a href="' . action('IncomeController@edit', $trans['id']) . '" data-title="' . _lang('Update Income') . '" class="btn btn-warning btn-sm ajax-modal"><i class="ti-pencil-alt"></i></a> '
+                        . '<a href="' . action('IncomeController@show', $trans['id']) . '" data-title="' . _lang('View Income') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
+                        . csrf_field()
+                        . '<input name="_method" type="hidden" value="DELETE">'
+                        . (Auth::user()->is_subuser != 1 ? '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>' : '')
                         . '</form>';
                 } else {
                     return '<form action="' . action('IncomeController@destroy', $trans['id']) . '" class="text-center" method="post">'
-                    . '<a href="#" data-title="' . _lang('Update Income') . '" class="btn btn-warning btn-sm disabled"><i class="ti-pencil-alt"></i></a> '
-                    . '<a href="' . action('IncomeController@show', $trans['id']) . '" data-title="' . _lang('View Income') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
-                    . csrf_field()
-                    . '<input name="_method" type="hidden" value="DELETE">'
-                    . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+                        . '<a href="#" data-title="' . _lang('Update Income') . '" class="btn btn-warning btn-sm disabled"><i class="ti-pencil-alt"></i></a> '
+                        . '<a href="' . action('IncomeController@show', $trans['id']) . '" data-title="' . _lang('View Income') . '" class="btn btn-info btn-sm ajax-modal"><i class="ti-eye"></i></a> '
+                        . csrf_field()
+                        . '<input name="_method" type="hidden" value="DELETE">'
+                        . (Auth::user()->is_subuser != 1 ? '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>' : '')
                         . '</form>';
                 }
             })
+
             ->setRowId(function ($trans) {
                 return "row_" . $trans->id;
             })

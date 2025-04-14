@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ContactController extends Controller {
 
@@ -45,15 +46,31 @@ class ContactController extends Controller {
             ->addColumn('subcategory_name', function ($contact) {
                 return $contact->subcategory ? $contact->subcategory->name : '';
             })
+            // ->addColumn('action', function ($contact) {
+            //     return '<form action="' . action('ContactController@destroy', $contact['id']) . '" class="text-center" method="post">'
+            //     . '<a href="' . action('ContactController@show', $contact['id']) . '" class="btn btn-primary btn-sm"><i class="ti-eye"></i></a> '
+            //     . '<a href="' . action('ContactController@edit', $contact['id']) . '" class="btn btn-warning btn-sm"><i class="ti-pencil-alt"></i></a> '
+            //     . csrf_field()
+            //         . '<input name="_method" type="hidden" value="DELETE">'
+            //         . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+            //         . '</form>';
+            // })
             ->addColumn('action', function ($contact) {
-                return '<form action="' . action('ContactController@destroy', $contact['id']) . '" class="text-center" method="post">'
-                . '<a href="' . action('ContactController@show', $contact['id']) . '" class="btn btn-primary btn-sm"><i class="ti-eye"></i></a> '
-                . '<a href="' . action('ContactController@edit', $contact['id']) . '" class="btn btn-warning btn-sm"><i class="ti-pencil-alt"></i></a> '
-                . csrf_field()
-                    . '<input name="_method" type="hidden" value="DELETE">'
-                    . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
-                    . '</form>';
+                $view = '<a href="' . action('ContactController@show', $contact['id']) . '" class="btn btn-primary btn-sm"><i class="ti-eye"></i></a> ';
+                $edit = '<a href="' . action('ContactController@edit', $contact['id']) . '" class="btn btn-warning btn-sm"><i class="ti-pencil-alt"></i></a> ';
+            
+                $delete = '';
+                if (Auth::user()->is_subuser != 1) {
+                    $delete = '<form action="' . action('ContactController@destroy', $contact['id']) . '" method="POST" style="display:inline-block;">'
+                            . csrf_field()
+                            . '<input name="_method" type="hidden" value="DELETE">'
+                            . '<button class="btn btn-danger btn-sm btn-remove" type="submit"><i class="ti-trash"></i></button>'
+                            . '</form>';
+                }
+            
+                return '<div class="text-center">' . $view . $edit . $delete . '</div>';
             })
+            
             ->setRowId(function ($contact) {
                 return "row_" . $contact->id;
             })
@@ -107,6 +124,7 @@ class ContactController extends Controller {
             'contact_email' => 'required|email|max:100',
             'category_id'   => 'required',
             'subcategory_id'=> 'required',
+            'is_subuser'    => 'required',
             'contact_phone' => 'nullable|max:20',
             'country'       => 'nullable|max:50',
             'city'          => 'nullable|max:50',
@@ -146,7 +164,10 @@ class ContactController extends Controller {
             $user->name       = $request->input('name');
             $user->email      = $request->input('email');
             $user->password   = Hash::make($request->password);
-            $user->user_type  = 'client';
+            // $user->user_type  = 'client';
+            $user->user_type  = 'user';
+            $user->is_subuser  = $request->input('is_subuser');
+            $user->email_verified_at  = now();
             $user->status     = $request->input('status');
             $user->company_id = company_id();
             $user->save();

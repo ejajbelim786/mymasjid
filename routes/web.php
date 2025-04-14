@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
+Route::get('/add-subuser-column', 'QueryController@addSubUserColumn');
 
 Route::group(['middleware' => ['install']], function () {
 
