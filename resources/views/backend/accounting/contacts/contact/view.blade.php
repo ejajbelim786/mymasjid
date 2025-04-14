@@ -61,7 +61,7 @@
                                 <td>{{ _lang('Member Phone') }}</td>
                                 <td>{{ $contact->contact_phone }}</td>
                             </tr>
-                            <tr>
+                            {{--  <tr>
                                 <td>{{ _lang('Country') }}</td>
                                 <td>{{ $contact->country }}</td>
                             </tr>
@@ -76,7 +76,7 @@
                             <tr>
                                 <td>{{ _lang('Zip') }}</td>
                                 <td>{{ $contact->zip }}</td>
-                            </tr>
+                            </tr>  --}}
                             <tr>
                                 <td>{{ _lang('Address') }}</td>
                                 <td>{{ $contact->address }}</td>

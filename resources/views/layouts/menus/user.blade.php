@@ -224,9 +224,9 @@
 
     <nav class="sb-sidenav-menu-nested nav">
 
-        <a class="nav-link" href="{{ route('suppliers.index') }}">{{ _lang('Item List') }}</a>
+        <a class="nav-link" href="{{ route('donate.index') }}">{{ _lang('Item List') }}</a>
 
-        <a class="nav-link" href="{{ route('suppliers.create') }}">{{ _lang('Add New Items') }}</a>
+        <a class="nav-link" href="{{ route('donate.create') }}">{{ _lang('Add New Items') }}</a>
 
     </nav>
 

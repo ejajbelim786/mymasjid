@@ -7,8 +7,8 @@
         <div class="card">
             <div class="card-header d-flex align-items-center">
 				<h4 class="header-title">{{ _lang('List Of Donate Items') }}</h4>
-                <a class="btn btn-primary btn-sm ml-auto ajax-modal" data-title="{{ _lang('Add Supplier') }}"
-                    href="{{ route('suppliers.create') }}"><i class="ti-plus"></i> {{ _lang('Add New') }}</a>
+                <a class="btn btn-primary btn-sm ml-auto ajax-modal" data-title="{{ _lang('Add Donators') }}"
+                    href="{{ route('donate.create') }}"><i class="ti-plus"></i> {{ _lang('Add New') }}</a>
             </div>
 
             <div class="card-body">
@@ -37,10 +37,10 @@
                             <td class="text-center">
                                 <form action="{{action('SupplierController@destroy', $supplier['id'])}}" method="post">
                                     <a href="{{action('SupplierController@edit', $supplier['id'])}}"
-                                        data-title="{{ _lang('Update Supplier Information') }}"
+                                        data-title="{{ _lang('Update Donator Information') }}"
                                         class="btn btn-warning btn-sm ajax-modal"><i class="ti-pencil-alt"></i></a>
                                     <a href="{{action('SupplierController@show', $supplier['id'])}}"
-                                        data-title="{{ _lang('View Supplier') }}"
+                                        data-title="{{ _lang('View Donator') }}"
                                         class="btn btn-primary btn-sm ajax-modal"><i class="ti-eye"></i></a>
                                     {{ csrf_field() }}
                                    <!--- <input name="_method" type="hidden" value="DELETE">

@@ -77,7 +77,7 @@ class ContactController extends Controller {
     private function generateUniqueIdentityNo()
     {
         $prefix = "NJM";
-        $year = date("y"); // Current year ka last 2 digits
+        // $year = date("y"); // Current year ka last 2 digits
     
         // Eloquent query se last user_id fetch karo (Example: NJM25001)
         $lastUser = Contact::orderBy('id', 'desc')->first();
@@ -89,7 +89,7 @@ class ContactController extends Controller {
             $newNumber = "001"; // First user ke liye
         }
 
-        return $prefix . $year . $newNumber;
+        return $prefix . $newNumber;
     }
 
     /**
@@ -99,6 +99,7 @@ class ContactController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'profile_type'  => 'required|max:20',
             'company_name'  => 'nullable|max:50',

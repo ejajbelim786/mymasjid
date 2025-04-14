@@ -156,7 +156,7 @@
 
                                 <label class="control-label">{{ _lang('Date') }}</label>
 
-                                <input type="text" class="form-control" name="postal_code"
+                                <input type="date" class="form-control" name="postal_code"
 
                                     value="{{ $supplier->postal_code }}">
 

@@ -7,8 +7,8 @@
                 <div class="form-group">
                     <label class="control-label">{{ _lang('Profile Type') }}</label>
                     <select class="form-control select2" name="profile_type" required>
-                        <option value="Company" {{ old('profile_type') == 'Company' ? 'selected' : '' }}>
-                            {{ _lang('Company') }}</option>
+                        {{--  <option value="Company" {{ old('profile_type') == 'Company' ? 'selected' : '' }}>
+                            {{ _lang('Company') }}</option>  --}}
                         <option value="Individual" {{ old('profile_type') == 'Individual' ? 'selected' : '' }}>
                             {{ _lang('Individual') }}</option>
                     </select>
@@ -45,12 +45,31 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            {{--  <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">{{ _lang('Country') }}</label>
                     <select class="form-control select2" name="country">
                         <option value="">{{ _lang('Select Country') }}</option>
                         {{ get_country_list( old('country') ) }}
+                    </select>
+                </div>
+            </div>  --}}
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">{{ _lang('Category') }}</label>
+                    <select class="form-control select2" name="category_id" id="category">
+                        <option value="">{{ _lang('- Select Category -') }}</option>
+                        {!! create_option("categories", "id", "name", old('category_id')) !!}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">{{ _lang('Sub Category') }}</label>
+                    <select class="form-control select2" name="subcategory_id" id="subcategory">
+                        <option value="">{{ _lang('- Select Subcategory -') }}</option>
                     </select>
                 </div>
             </div>
@@ -78,3 +97,31 @@
         </div>
     </div>
 </form>
+
+
+{{--  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  --}}
+<script>
+    $(document).ready(function(){
+        $('#category').change(function(){
+            var categoryId = $(this).val();
+            $('#subcategory').html('<option value="">Loading...</option>');
+
+            if(categoryId) {
+                $.ajax({
+                    url: "{{ url('/get-subcategories') }}/" + categoryId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#subcategory').html('<option value="">- Select Subcategory -</option>');
+                        $.each(data, function(index, subcategory){
+                            $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.name+'</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#subcategory').html('<option value="">- Select Subcategory -</option>');
+            }
+        });
+    });
+</script>

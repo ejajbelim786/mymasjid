@@ -199,7 +199,7 @@
             </tr>
         </tbody>
     </table>  --}}
-    <table>
+    {{--  <table>
         <thead>
             <tr>
                 @foreach ($headers as $header)
@@ -218,7 +218,46 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table>  --}}
+    @php
+    // Split total row and data
+    $totalRow = collect($data)->firstWhere('expense_type', 'Total Amount');
+    $filteredData = collect($data)
+        ->filter(fn($row) => $row['expense_type'] !== 'Total Amount')
+        ->sortByDesc(function ($row) {
+            return \Carbon\Carbon::createFromFormat('d/m/Y', $row['date']);
+        });
+@endphp
+
+<table>
+    <thead>
+        <tr>
+            @foreach ($headers as $header)
+                <th>{{ $header }}</th>
+            @endforeach
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($filteredData as $row)
+            <tr>
+                <td>{{ $row['date'] }}</td>
+                <td>{{ $row['expense_type'] ?? '-' }}</td>
+                <td>{{ $row['account'] ?? '-' }}</td>
+                <td>{{ $row['note'] ?? '-' }}</td>
+                <td class="text-right">{{ $row['amount'] }}</td>
+            </tr>
+        @endforeach
+
+        @if ($totalRow)
+            <tr class="total-row font-bold">
+                <td colspan="3"></td>
+                <td>કુલ રકમ</td>
+                <td class="text-right">{{ $totalRow['amount'] }}</td>
+            </tr>
+        @endif
+    </tbody>
+</table>
+
 
 </body>
 

@@ -68,24 +68,31 @@
  
                 <table class="table table-bordered report-table">
                     <thead>
+                        <th>{{ _lang('Title') }}</th>
                         <th>{{ _lang('Date') }}</th>
                         <th>{{ _lang('Description') }}</th>
                         <th class="text-right">{{ _lang('Debit') }}</th>
                         <th class="text-right">{{ _lang('Credit') }}</th>
                     </thead>
+                    {{--  @dd($report_data);  --}}
                     <tbody>
                         @if(isset($report_data))
                         @php
                         $currency = currency();
                         $debit = 0;
                         $credit = 0;
+                        if($account == 1 ){
+                            $title = 'રોકળ રકમ';
+                        }else{
+                            $title = 'બેંક એકાઉન્ટ';
+                        }
                         @endphp
-
                         @foreach($report_data as $report)
                         @if( $report->debit == 0 && $report->credit == 0 )
                         @php continue; @endphp
                         @endif
                         <tr>
+                            <td>{{ $title }}</td>
                             <td>{{ date($date_format,strtotime($report->date)) }}</td>
                             <td>{{ $report->note }}</td>
                             <td class="text-right">
@@ -97,9 +104,10 @@
                         @endforeach
                         <tr>
                             <td></td>
+                            <td></td>
                             <td>{{ _lang('Total') }}</td>
-                            <td class="text-right"><b>{{ decimalPlace($debit, $currency) }}</b></td>
-                            <td class="text-right"><b>{{ decimalPlace($credit, $currency) }}</b></td>
+                            <td class="text-right " ><b class="totalDebit">{{ decimalPlace($debit, $currency) }}</b></td>
+                            <td class="text-right "><b class="totalCredit">{{ decimalPlace($credit, $currency) }}</b></td>
                         </tr>
                         @endif
                     </tbody>
@@ -111,6 +119,61 @@
 
 <script>
     $("#exportPdf").click(function () {
+        var tableData = [];
+        var accountName = $("select[name='account'] option:selected").text();
+        var date1 = $("#date1").val();
+        var date2 = $("#date2").val();
+    
+        var totalDebit = $(".totalDebit").text();
+        var totalCredit = $(".totalCredit").text();
+
+        console.log("Total Debit: ", totalDebit);
+        console.log("Total Credit: ", totalCredit);
+        $(".report-table tbody tr").each(function () {
+    
+            var rowData = {
+                title: $(this).find("td:eq(0)").text().trim(),
+                date: $(this).find("td:eq(1)").text().trim(),
+                description: $(this).find("td:eq(2)").text().trim(),
+                debit: $(this).find("td:eq(3)").text().trim() || "0.00",
+                credit: $(this).find("td:eq(4)").text().trim() || "0.00"
+            };
+            
+    
+            tableData.push(rowData);
+        });
+    
+        $.ajax({
+            url: "{{ route('export.account.pdf') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                data: tableData,
+                account: accountName,
+                date1: date1,
+                date2: date2,
+                total_debit: totalDebit,
+                total_credit: totalCredit
+            },
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function (response) {
+                var blob = new Blob([response], { type: "application/pdf" });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "Account_Statement_" + date1 + "_to_" + date2 + ".pdf";
+                link.click();
+            },
+            error: function (xhr) {
+                alert("Error generating PDF: " + xhr.responseText);
+            }
+        });
+    });
+    
+
+
+    {{--  $("#exportPdf").click(function () {
         var tableData = [];
         var accountName = $("select[name='account'] option:selected").text();
         var date1 = $("#date1").val();
@@ -154,6 +217,6 @@
                 alert("Error generating PDF: " + xhr.responseText);
             }
         });
-    });
+    });  --}}
 </script>
 @endsection

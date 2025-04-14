@@ -1,4 +1,4 @@
-<form method="post" class="ajax-submit" autocomplete="off" action="{{ route('suppliers.store') }}"
+<form method="post" class="ajax-submit" autocomplete="off" action="{{ route('donate.store') }}"
 
     enctype="multipart/form-data">
 
@@ -58,7 +58,7 @@
 
                 <label class="control-label">{{ _lang('Email') }}</label>
 
-                <input type="text" class="form-control" name="email" value="{{ old('email') }}" required>
+                <input type="text" class="form-control" name="email" value="{{ old('email') }}" >
 
             </div>
 
@@ -119,7 +119,7 @@
 
                 <label class="control-label">{{ _lang('Date') }}</label>
 
-                <input type="text" class="form-control" name="postal_code" value="{{ old('postal_code') }}">
+                <input type="date" class="form-control" name="postal_code" value="{{ old('postal_code') }}">
 
             </div>
 

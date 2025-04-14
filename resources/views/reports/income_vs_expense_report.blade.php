@@ -63,6 +63,7 @@
                         $currency = currency();
                         $income_total = 0;
                         $expense_total = 0;
+                        $balance = 0;
                         @endphp
 
                         @foreach($report_data as $report)
@@ -78,6 +79,8 @@
                         @php
                         $income_total += $report->income_amount;
                         $expense_total += $report->expense_amount;
+                        
+                        $balance = $income_total - $expense_total;
                         @endphp
                         @endforeach
                         <tr>
@@ -91,6 +94,20 @@
 
                         @endif
                     </tbody>
+                    <tfoot>
+                        {{--  <tr class="total-row">
+                            <td colspan="2">કુલ આવક</td>
+                            <td class="text-right">₹ {{ number_format($totalIncome, 2) }}</td>
+                            <td colspan="2">કુલ જાવક</td>
+                            <td class="text-right">₹ {{ number_format($totalExpense, 2) }}</td>
+                        </tr>  --}}
+                        @if(isset($balance))
+                        <tr class="total-row">
+                            <td colspan="5" class="text-right text-primary">હાલનો વધ / ઘટ સિલિક</td>
+                            <td class="text-right last-bank-balance" style="color: {{ $balance < 0 ? 'red' : 'green' }}">₹ {{ number_format($balance, 2) }}</td>
+                        </tr>
+                        @endif
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -102,7 +119,10 @@
             var tableData = [];
             var date1 = $("#date1").val();
             var date2 = $("#date2").val();
-
+            let bankBalanceRaw = $(".last-bank-balance").text();
+            let cleanBalance = bankBalanceRaw.replace(/[₹,]/g, '').trim();
+            let bankBalance = parseFloat(cleanBalance);
+            console.log(bankBalance);
             if (!date1 || !date2) {
                 alert('કૃપા કરીને શરુઆત અને અંત તારીખ પસંદ કરો.');
                 return false;
@@ -127,7 +147,8 @@
                     _token: "{{ csrf_token() }}",
                     data: tableData,
                     date1: date1,
-                    date2: date2
+                    date2: date2,
+                    bankBalance: bankBalance
                 },
                 xhrFields: {
                     responseType: 'blob'

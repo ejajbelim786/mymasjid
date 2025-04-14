@@ -41,6 +41,7 @@
                                     <label class="control-label">{{ _lang('Payer') }}</label>
                                     <select class="form-control select2" name="payee_id">
                                         <option value="">{{ _lang('Select One') }}</option>
+                                        <option value="all">{{ _lang('All') }}</option>
                                         {{ create_option("contacts","id","contact_name",isset($payer_id) ? $payer_id : "",array("company_id="=>company_id())) }}
                                     </select>
                                 </div>

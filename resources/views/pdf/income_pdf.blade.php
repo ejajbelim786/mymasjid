@@ -155,7 +155,7 @@
     {{--  <hr  style="border: 1px solid #2c5e8f;margin: 4px;">  --}}
 
     <h3 class="report-title"
-        style="font-family: 'GujaratiFont', sans-serif !important;font-weight:normal;margin: 0px;padding: 0px;">
+        style="font-family: 'GujaratiFontBold', sans-serif !important;font-weight:bold;margin: 0px;padding: 0px;">
         {{ $data['heading'] ?? 'આવક રિપોર્ટ' }}</h3>
 
     <table style="margin-top: 20px;padding: 10px;">
@@ -166,7 +166,7 @@
                 @endforeach
             </tr>
         </thead>
-        <tbody>
+        {{--  <tbody>
             @foreach ($data['data'] as $row)
                 <tr class="{{ ($row['income_type'] ?? '') == 'Total Amount' ? 'total-row' : '' }}">
                     <td>{{ $row['date'] ?? '-' }}</td>
@@ -176,7 +176,27 @@
                     <td class="text-right">{{ $row['amount'] ?? '0.00' }}</td>
                 </tr>
             @endforeach
+        </tbody>  --}}
+        <tbody>
+            @foreach ($data['data'] as $row)
+                @if ($row['income_type'] === 'Total Amount')
+                    <tr class="total-row" style="font-family: 'GujaratiFontBold', sans-serif !important;font-weight:bold;">
+                        <td colspan="3"></td>
+                        <td><strong style="font-family: 'GujaratiFontBold', sans-serif !important;font-weight:bold;">કુલ રકમ</strong></td>
+                        <td class="text-right" style="font-family: 'GujaratiFontBold', sans-serif !important;font-weight:bold;"><strong>{{ $row['amount'] }}</strong></td>
+                    </tr>
+                @else
+                    <tr>
+                        <td>{{ $row['date'] }}</td>
+                        <td>{{ $row['income_type'] ?? '-' }}</td>
+                        <td>{{ $row['account'] }}</td>
+                        <td>{{ $row['note'] ?? '-' }}</td>
+                        <td class="text-right">{{ $row['amount'] }}</td>
+                    </tr>
+                @endif
+            @endforeach
         </tbody>
+        
     </table>
 
 </body>

@@ -20,7 +20,7 @@
                         <div class="row">
                             @csrf
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">{{ __('Category') }}</label>
                                     <select class="form-control select2" name="category" id="category">
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                             
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">{{ __('Subcategory') }}</label>
                                     <select class="form-control select2" name="subcategory" id="subcategory">
@@ -39,14 +39,23 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">{{ _lang('Group') }}</label>
+                                    <select class="form-control select2" name="group_id">
+                                        <option value="">{{ _lang('- Select Group -') }}</option>
+                                        {{ create_option("contact_groups", "id", "name", old('group_id', $group_id ?? ""), array("company_id="=>company_id())) }}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
                                 <button type="submit" class="btn btn-primary btn-sm">{{ __('View Report') }}</button>
                             </div>
                         </div>
                     </form>
                 </div>
                 <button type="button" id="downloadContactPDF" class="btn btn-danger btn-sm">{{ _lang('Export PDF') }}</button>
-            </div>
             
             <!-- Report Header -->
             <div class="report-header">
@@ -54,7 +63,6 @@
                 <h6>{{ __('Category:') }} {{ isset($category_id) ? get_category_name($category_id) : 'All' }} | 
                     {{ __('Subcategory:') }} {{ isset($subcategory_id) ? get_subcategory_name($subcategory_id) : 'All' }}</h6>
             </div>
-
             <!-- Report Table -->
             <table class="table table-bordered report-table">
                 <thead>
@@ -64,6 +72,7 @@
                     <th>{{ __('Email') }}</th>
                     <th>{{ __('Category') }}</th>
                     <th>{{ __('Subcategory') }}</th>
+                    <th>{{ __('Group Name') }}</th>
                 </thead>
                 <tbody>
                     @if(isset($report_data))
@@ -73,17 +82,21 @@
                             <td>{{ $report->contact_name }}</td>
                             <td>{{ $report->contact_phone }}</td>
                             <td>{{ $report->contact_email }}</td>
-                            <td>{{ $report->category_name }}</td>
+                            <td>{{ $report->category_name ?? 'N/A'  }}</td>
                             <td>{{ $report->subcategory_name ?? 'N/A' }}</td> 
+                            <td>{{ $report->group_name ?? 'N/A'  }}</td>
+
                         </tr>
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="6" class="text-center">{{ __('No data available') }}</td>
+                            <td colspan="7" class="text-center">{{ __('No data available') }}</td>
                         </tr>
                     @endif
                 </tbody>
             </table>
+        </div>
+
         </div>
     </div>
 </div>
@@ -96,16 +109,16 @@
 
             $(".report-table tbody tr").each(function () {
                 var row = {
-                    trans_date: $(this).find("td:eq(0)").text().trim(),
-                    income_type: $(this).find("td:eq(1)").text().trim(),
-                    note: $(this).find("td:eq(2)").text().trim(),
-                    account: $(this).find("td:eq(3)").text().trim(),
-                    payer: $(this).find("td:eq(4)").text().trim(),
-                    amount: $(this).find("td:eq(5)").text().trim()
+                    uin: $(this).find("td:eq(0)").text().trim(),
+                    contact_name: $(this).find("td:eq(1)").text().trim(),
+                    contact_phone: $(this).find("td:eq(2)").text().trim(),
+                    contact_email: $(this).find("td:eq(3)").text().trim(),
+                    category_name: $(this).find("td:eq(4)").text().trim(),
+                    subcategory_name: $(this).find("td:eq(5)").text().trim(),
+                    group_name: $(this).find("td:eq(6)").text().trim()
                 };
                 tableData.push(row);
             });
-
             $.ajax({
                 url: "{{ route('report-by-contact.ajax.pdf') }}",
                 method: "POST",

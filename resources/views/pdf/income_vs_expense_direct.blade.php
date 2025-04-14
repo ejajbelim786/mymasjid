@@ -17,7 +17,8 @@
         }
 
         body {
-            font-family: 'GujaratiFont', sans-serif;
+            font-family: 'GujaratiFontBold', sans-serif;
+            font-weight: bold;
         }
 
         .header {
@@ -83,8 +84,8 @@
         h3,
         th,
         td {
-            font-family: 'GujaratiFont', sans-serif;
-            font-weight: normal;
+            font-family: 'GujaratiFontBold', sans-serif;
+            font-weight: bold;
         }
 
         .report-table {
@@ -165,9 +166,9 @@
         {{ date('d-m-Y', strtotime($data['date2'])) }} સુધી</p>
     <table class="report-table">
         <tr>
-            <td class="income-box" style="font-family: 'GujaratiFont', sans-serif !important;font-weight:normal;">ઇન્કમ
+            <td class="income-box" style="font-family: 'GujaratiFont', sans-serif !important;font-weight:normal;">આવક
             </td>
-            <td class="expense-box" style="font-family: 'GujaratiFont', sans-serif !important;font-weight:normal;">ખર્ચ
+            <td class="expense-box" style="font-family: 'GujaratiFont', sans-serif !important;font-weight:normal;">જાવક
             </td>
         </tr>
     </table>
@@ -184,6 +185,16 @@
             @php
                 $totalIncome = 0;
                 $totalExpense = 0;
+
+                foreach ($data['data'] as $row) {
+                    $income = floatval(str_replace(['₹', ',', ' '], '', $row['income_amount']));
+                    $expense = floatval(str_replace(['₹', ',', ' '], '', $row['expense_amount']));
+                    
+                    $totalIncome += $income;
+                    $totalExpense += $expense;
+                }
+
+                $balance = $data['bankBalance'];
             @endphp
             @foreach ($data['data'] as $row)
                 <tr>
@@ -196,8 +207,21 @@
                 </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            {{--  <tr class="total-row">
+                <td colspan="2">કુલ આવક</td>
+                <td class="text-right">₹ {{ number_format($totalIncome, 2) }}</td>
+                <td colspan="2">કુલ જાવક</td>
+                <td class="text-right">₹ {{ number_format($totalExpense, 2) }}</td>
+            </tr>  --}}
+            <tr class="total-row">
+                <td colspan="5" class="text-right text-primary">હાલનો વધ / ઘટ સિલિક</td>
+                <td class="text-right" style="color: {{ $balance < 0 ? 'red' : 'green' }}">₹ {{ number_format($balance, 2) }}</td>
+            </tr>
+        </tfoot>
+        
     </table>
-
+    
 </body>
 
 </html>

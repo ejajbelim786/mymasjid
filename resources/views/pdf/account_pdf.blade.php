@@ -37,12 +37,12 @@
         div,
         h3,
         th {
-            font-family: 'GujaratiFont', sans-serif;
-            font-weight: normal;
+            font-family: 'GujaratiFontBold', sans-serif !important;
+            font-weight: bold !important;
         }
 
         body {
-            font-family: 'GujaratiFont', sans-serif !important;
+            font-family: 'GujaratiFontBold', sans-serif !important;
             margin: 0;
             padding: 20px;
             color: #333;
@@ -56,8 +56,8 @@
         }
 
         .organization-name {
-            font-family: 'GujaratiFont', sans-serif;
-            font-weight: normal;
+            font-family: 'GujaratiFontBold', sans-serif;
+            font-weight: bold;
             font-size: 28px;
             font-weight: bold;
             color: #2c5e8f;
@@ -126,7 +126,7 @@
     </style>
 </head>
 
-<body style="font-family: 'GujaratiFont', sans-serif !important;font-weight: normal !important;">
+<body style="font-family: 'GujaratiFontBold', sans-serif !important;font-weight: bold !important;">
     <div class="header" style="width:100%; background-color: #f9f9f9; text-align:center">
         <!--- <table style="width: 100%; border-collapse: collapse; border: none;margin-top: 0px;">
              <tr style="border: none;">
@@ -160,7 +160,7 @@
          <img src="https://www.ejajbelim.com/mymasjid2/uploads/media/jamamasjidtitle.png?abc2" alt="Title" style="width:100%; height: auto; max-width:950px">
      </div>
 
-    <h3 class="report-title">એકાઉન્ટ સ્ટેટમેન્ટ</h3>
+    <h3 class="report-title" style="font-family: 'GujaratiFontBold', sans-serif !important;font-weight: bold; font-size: 16px;">એકાઉન્ટ સ્ટેટમેન્ટ</h3>
 
     <table>
         <thead>
@@ -171,8 +171,21 @@
             </tr>
         </thead>
         <tbody>
+            @php
+                $totalDebit = 0;
+                $totalCredit = 0;
+            @endphp
+        
             @foreach ($data['data'] as $row)
+                @php
+                    $debit = isset($row['debit']) && is_numeric($row['debit']) ? (float) $row['debit'] : 0;
+                    $credit = isset($row['credit']) && is_numeric($row['credit']) ? (float) $row['credit'] : 0;
+                
+                    $totalDebit += $debit;
+                    $totalCredit += $credit;
+                @endphp
                 <tr>
+                    <td>{{ $row['title'] }}</td>
                     <td>{{ $row['date'] }}</td>
                     <td>{{ $row['description'] }}</td>
                     <td>{{ $row['debit'] }}</td>

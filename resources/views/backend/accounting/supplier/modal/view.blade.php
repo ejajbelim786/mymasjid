@@ -13,7 +13,7 @@
     </tr>
     <tr>
         <td>{{ _lang('Email') }}</td>
-        <td>{{ $supplier->email }}</td>
+        <td>{{ $supplier->email ?? '-' }}</td>
     </tr>
     <tr>
         <td>{{ _lang('Phone') }}</td>

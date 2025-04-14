@@ -47,11 +47,6 @@ class SupplierController extends Controller
 			'supplier_name' => 'required|max:191',
             'company_name' => 'nullable|max:191',
             'vat_number' => 'nullable|max:191',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('suppliers')->where('company_id',company_id()),
-            ],
             'phone' => 'required|max:20',
             'address' => 'nullable|max:191',
             'country' => 'nullable|max:50',
@@ -64,7 +59,7 @@ class SupplierController extends Controller
 			if($request->ajax()){ 
 			    return response()->json(['result'=>'error','message'=>$validator->errors()->all()]);
 			}else{
-				return redirect()->route('suppliers.create')
+				return redirect()->route('donate.create')
 							->withErrors($validator)
 							->withInput();
 			}			
@@ -86,7 +81,7 @@ class SupplierController extends Controller
         $supplier->save();
         
 		if(! $request->ajax()){
-           return redirect()->route('suppliers.create')->with('success', _lang('Information has been added sucessfully'));
+           return redirect()->route('donate.create')->with('success', _lang('Information has been added sucessfully'));
         }else{
 		   return response()->json(['result'=>'success','action'=>'store','message'=>_lang('Information has been added sucessfully'),'data'=>$supplier]);
 		}
@@ -141,11 +136,6 @@ class SupplierController extends Controller
 			'supplier_name' => 'required|max:191',
             'company_name' => 'nullable|max:191',
             'vat_number' => 'nullable|max:191',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('suppliers')->where('company_id',company_id())->ignore($id),
-            ],
             'phone' => 'required|max:20',
             'address' => 'nullable|max:191',
             'country' => 'nullable|max:50',
@@ -158,7 +148,7 @@ class SupplierController extends Controller
 			if($request->ajax()){ 
 			    return response()->json(['result'=>'error','message'=>$validator->errors()->all()]);
 			}else{
-				return redirect()->route('suppliers.edit', $id)
+				return redirect()->route('donate.edit', $id)
 							->withErrors($validator)
 							->withInput();
 			}			
@@ -179,7 +169,7 @@ class SupplierController extends Controller
         $supplier->save();
 		
 		if(! $request->ajax()){
-           return redirect()->route('suppliers.index')->with('success', _lang('Information has been updated sucessfully'));
+           return redirect()->route('donate.index')->with('success', _lang('Information has been updated sucessfully'));
         }else{
 		   return response()->json(['result'=>'success','action'=>'update', 'message'=>_lang('Information has been updated sucessfully'),'data'=>$supplier]);
 		}

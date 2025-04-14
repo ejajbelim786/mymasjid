@@ -135,34 +135,35 @@
     <p class="report-date">તારીખ: {{ date('d-m-Y', strtotime($data['date1'])) }} થી
         {{ date('d-m-Y', strtotime($data['date2'])) }} સુધી</p>
 
-    <table>
-        <thead>
-            <tr>
-                @foreach ($data['headers'] as $header)
-                    <th>{{ $header }}</th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            @php $total = 0; @endphp
-            @foreach ($data['data'] as $row)
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $row['trans_date'] }}</td>
-                    <td>{{ $row['income_type'] }}</td>
-                    <td>{{ $row['note'] }}</td>
-                    <td>{{ $row['account'] }}</td>
-                    <td>{{ $row['payer'] }}</td>
-                    <td class="text-right">{{ $row['amount'] }}</td>
+                    @foreach ($data['headers'] as $header)
+                        <th>{{ $header }}</th>
+                    @endforeach
                 </tr>
-                {{--  @php $total += $row['amount']; @endphp  --}}
-            @endforeach
-            <tr class="total-row">
-                {{--  <td colspan="3">કુલ રકમ</td>
-                <td class="text-right">{{ number_format($total, 2) }}</td>
-                <td></td>  --}}
-            </tr>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($data['data'] as $row)
+                    @if ($row['note'] === 'TOTAL AMOUNT')
+                        <tr class="total-row font-weight-bold">
+                            <td colspan="5" class="text-right">કુલ રકમ</td>
+                            <td class="text-right">{{ $row['amount'] }}</td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td>{{ $row['trans_date'] }}</td>
+                            <td>{{ $row['income_type'] }}</td>
+                            <td>{{ $row['note'] }}</td>
+                            <td>{{ $row['account'] }}</td>
+                            <td>{{ $row['payer'] }}</td>
+                            <td class="text-right">{{ $row['amount'] }}</td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+        
 
 </body>
 

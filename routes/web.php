@@ -115,7 +115,7 @@ Route::group(['middleware' => ['install']], function () {
 			Route::resource('payment_methods','PaymentMethodController')->except('show');
 					
 			//Supplier Controller
-			Route::resource('suppliers','SupplierController');
+			Route::resource('donate','SupplierController');
 
 			//Product Controller
 			Route::get('products/get_product/{id}','ProductController@get_product');
@@ -250,21 +250,16 @@ Route::post('install/finish', 'Install\InstallController@final_touch');
 
 //Update System
 Route::get('migration/update', 'Install\UpdateController@update_migration');
-
-use App\Http\Controllers\PDFController;
-
-Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
-
-Route::get('/generate-gujarati-pdf', [PDFController::class, 'generatePDF']);
-
-Route::post('/generate-expense-pdf', [PDFController::class, 'generateExpensePDF'])->name('generate.expense.pdf');
+Route::get('/generate-pdf', 'PDFController@generatePDF');
+Route::get('/generate-gujarati-pdf', 'PDFController@generatePDF');
+Route::post('/generate-expense-pdf', 'PDFController@generateExpensePDF')->name('generate.expense.pdf');
 Route::post('/export-account-pdf', 'PDFController@exportAccountPdf')->name('export.account.pdf');
-Route::post('export/income/pdf', [PDFController::class, 'generateIncomePDF'])->name('export.income.pdf');
-Route::post('/export-transfer-pdf', [PDFController::class, 'exportTransferPDF'])->name('export.transfer.pdf');
-Route::post('/reports/income-vs-expense/direct-pdf', [PDFController::class, 'exportIncomevsExpensePDF'])->name('income-vs-expense.ajax.pdf');
-Route::post('/report-by-payer/ajax-pdf', [PDFController::class, 'generatePayerReportPDF'])->name('report-by-payer.ajax.pdf');
-Route::post('/report-by-payee/ajax-pdf', [PDFController::class, 'generatePayeeReportPDF'])->name('report-by-payee.ajax.pdf');
-Route::post('/report-by-contact/ajax-pdf', [PDFController::class, 'generateContactReportPDF'])->name('report-by-contact.ajax.pdf');
+Route::post('export/income/pdf', 'PDFController@generateIncomePDF')->name('export.income.pdf');
+Route::post('/export-transfer-pdf', 'PDFController@exportTransferPDF')->name('export.transfer.pdf');
+Route::post('/reports/income-vs-expense/direct-pdf', 'PDFController@exportIncomevsExpensePDF')->name('income-vs-expense.ajax.pdf');
+Route::post('/report-by-payer/ajax-pdf', 'PDFController@generatePayerReportPDF')->name('report-by-payer.ajax.pdf');
+Route::post('/report-by-payee/ajax-pdf', 'PDFController@generatePayeeReportPDF')->name('report-by-payee.ajax.pdf');
+Route::post('/report-by-contact/ajax-pdf', 'PDFController@generateContactReportPDF')->name('report-by-contact.ajax.pdf');
 
 
 

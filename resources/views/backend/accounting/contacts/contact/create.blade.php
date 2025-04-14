@@ -18,8 +18,8 @@
                             <div class="form-group">
                                 <label class="control-label">{{ _lang('Profile Type') }}</label>
                                 <select class="form-control select2" name="profile_type" required>
-                                    <option value="Company" {{ old('profile_type')=="Company" ? "selected" : "" }}>
-                                        {{ _lang('Company') }}</option>
+                                    {{--  <option value="Company" {{ old('profile_type')=="Company" ? "selected" : "" }}>
+                                        {{ _lang('Company') }}</option>  --}}
                                     <option value="Individual"
                                         {{ old('profile_type')=="Individual" ? "selected" : "" }}>
                                         {{ _lang('Individual') }}</option>
@@ -59,14 +59,14 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        {{--  <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">{{ _lang('Country') }}</label>
                                 <select class="form-control select2" name="country">
                                     {{ get_country_list( old('country') ) }}
                                 </select>
                             </div>
-                        </div>
+                        </div>  --}}
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -98,7 +98,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        {{--  <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">{{ _lang('City') }}</label>
                                 <input type="text" class="form-control" name="city" value="{{ old('city') }}">
@@ -117,7 +117,7 @@
                                 <label class="control-label">{{ _lang('Zip') }}</label>
                                 <input type="text" class="form-control" name="zip" value="{{ old('zip') }}">
                             </div>
-                        </div>
+                        </div>  --}}
 
                         <div class="col-md-6">
                             <div class="form-group">

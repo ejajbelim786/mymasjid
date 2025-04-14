@@ -17,7 +17,8 @@
         }
 
         body {
-            font-family: 'GujaratiFont', sans-serif;
+            font-family: 'GujaratiFontBold', sans-serif;
+            font-weight: bold;
         }
 
         body,
@@ -25,8 +26,8 @@
         h3,
         th,
         td {
-            font-family: 'GujaratiFont', sans-serif;
-            font-weight: normal;
+            font-family: 'GujaratiFontBold', sans-serif;
+            font-weight: bold;
         }
 
         .header {
@@ -131,7 +132,7 @@
             style="width:100%; height: auto; max-width:950px">
     </div>
 
-    <h3 class="report-title" style="font-family: 'GujaratiFont', sans-serif !important;font-weight:normal;">
+    <h3 class="report-title" style="font-family: 'GujaratiFontBold', sans-serif !important;font-weight: bold;">
         {{ $data['heading'] }}</h3>
     {{--  <p class="report-date">તારીખ: {{ date('d-m-Y', strtotime($data['date1'])) }} થી {{ date('d-m-Y', strtotime($data['date2'])) }} સુધી</p>  --}}
 
@@ -139,7 +140,7 @@
         <thead>
             <tr>
                 @foreach ($data['headers'] as $header)
-                    <th>{{ $header }}</th>
+                    <th style="font-family: 'GujaratiFontBold', sans-serif !important;font-weight: bold;">{{ $header }}</th>
                 @endforeach
             </tr>
         </thead>
@@ -147,12 +148,13 @@
             @php $total = 0; @endphp
             @foreach ($data['data'] as $row)
                 <tr>
-                    <td>{{ $row['trans_date'] }}</td>
-                    <td>{{ $row['income_type'] }}</td>
-                    <td>{{ $row['note'] }}</td>
-                    <td>{{ $row['account'] }}</td>
-                    <td>{{ $row['payer'] }}</td>
-                    <td class="text-right">{{ $row['amount'] }}</td>
+                    <td>{{ $row['uin'] }}</td>
+                    <td>{{ $row['contact_name'] }}</td>
+                    <td>{{ $row['contact_phone'] }}</td>
+                    <td>{{ $row['contact_email'] }}</td>
+                    <td>{{ $row['category_name'] }}</td>
+                    <td>{{ $row['subcategory_name'] }}</td>
+                    <td>{{ $row['group_name'] }}</td>
                 </tr>
                 {{--  @php $total += $row['amount']; @endphp  --}}
             @endforeach

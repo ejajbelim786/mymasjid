@@ -24,7 +24,8 @@ class PDFController extends Controller
                 'ફોન',
                 'ઈમેલ',
                 'કેટેગરી',
-                'સબકેટેગરી'
+                'સબકેટેગરી',
+                'ગ્રુપ નામ'
             ],
             'data' => $data
         ];
@@ -59,7 +60,7 @@ class PDFController extends Controller
             'date1' => $date1,
             'date2' => $date2
         ];
-
+        // dd($data);
         $pdf = PDF::loadView('pdf.report_by_payee_pdf', compact('data'))
             ->setPaper('a4', 'portrait');
 
@@ -76,21 +77,21 @@ class PDFController extends Controller
         }
 
         $data = [
-            'title' => 'રિપોર્ટ  બાય પિયેર',
-            'heading' => 'રિપોર્ટ  બાય પિયેર',
+            'title' => 'ચુકવણીકર્તા મુજબ રિપોર્ટ',
+            'heading' => 'ચુકવણીકર્તા મુજબ રિપોર્ટ',
             'headers' => [
                 'તારીખ',
                 'ઈનકમ ટાઈપ',
                 'નોટ',
                 'એકાઉન્ટ',
-                'પિયેર',
+                'ચુકવણીકર્તા',
                 'રકમ'
             ],
             'data' => $data,
             'date1' => $date1,
             'date2' => $date2
         ];
-
+        // dd($data);
         $pdf = PDF::loadView('pdf.report_by_payer_pdf', compact('data'))
             ->setPaper('a4', 'portrait');
 
@@ -106,14 +107,15 @@ class PDFController extends Controller
         $requestData = $request->input('data');
         $date1 = $request->input('date1');
         $date2 = $request->input('date2');
+        $bankBalance = $request->input('bankBalance');
 
         if (!is_array($requestData)) {
             return response()->json(['error' => 'Invalid data format'], 400);
         }
 
         $data = [
-            'title' => 'ઇન્કમ વિરુદ્ધ ખર્ચ રિપોર્ટ',
-            'heading' => 'ઇન્કમ વિરુદ્ધ ખર્ચ રિપોર્ટ',
+            'title' => 'આવક જાવક રિપોર્ટ',
+            'heading' => 'આવક જાવક રિપોર્ટ',
             'headers' => [
                 'તારીખ',
                 'પ્રકાર',
@@ -124,9 +126,10 @@ class PDFController extends Controller
             ],
             'data' => $requestData,
             'date1' => $date1,
-            'date2' => $date2
+            'date2' => $date2,
+            'bankBalance' => $bankBalance
         ];
-
+        // dd($data);
         $pdf = PDF::loadView('pdf.income_vs_expense_direct', compact('data'))
             ->setPaper('a4', 'portrait');
 
@@ -180,6 +183,7 @@ class PDFController extends Controller
             'data' => $requestData,
             'logo' => asset('backend/images/mymasjid.jpg'),
         ];
+        // dd($data);
         $pdf = Pdf::loadView('pdf.income_pdf', compact('data'));
         return $pdf->download('Income_Report.pdf');
     }
@@ -194,6 +198,7 @@ class PDFController extends Controller
             'title' => 'એકાઉન્ટ રિપોર્ટ', 
             'heading' => 'એકાઉન્ટ ખર્ચ રિપોર્ટ', 
             'headers' => [
+                'ટાઇટલ', 
                 'તારીખ', 
                 'એકાઉન્ટ પ્રકાર', 
                 'એકાઉન્ટ',
@@ -221,6 +226,8 @@ class PDFController extends Controller
             'data' => $request->input('data'), 
             'logo' => asset('backend/images/mymasjid.jpg'),
         ];
+        // dd($data);
+
         $pdf = Pdf::loadView('pdf.expense_report', $data);
         return $pdf->download('Expense_Report.pdf');
     }

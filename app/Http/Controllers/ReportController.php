@@ -18,33 +18,139 @@ class ReportController extends Controller {
             $account    = $request->account;
             $company_id = company_id();
 
+            // if ($dr_cr == "dr") {
+            //     $data['report_data'] = DB::select("SELECT opening_date as date,'Account Opening Balance' as note,'' as debit,opening_balance as credit FROM accounts WHERE id='$account' AND company_id = '$company_id'
+			//  	UNION ALL
+			//  	SELECT '$date1' as date,'Opening Balance' as note,(SELECT IFNULL(SUM(amount),0) as debit FROM transactions WHERE dr_cr='dr' AND trans_date<'$date1' AND account_id='$account' AND company_id = '$company_id') as debit, (SELECT IFNULL(SUM(amount),0) as credit FROM transactions WHERE dr_cr='cr' AND trans_date < '$date1' AND account_id='$account' AND company_id = '$company_id') as credit
+			//  	UNION ALL
+			//  	SELECT trans_date,note, SUM(IF(dr_cr='dr',amount,NULL)) as debit, SUM(IF(dr_cr='cr',amount,NULL)) as credit FROM transactions WHERE trans_date BETWEEN '$date1' AND '$date2' AND account_id='$account'  AND company_id = '$company_id' AND dr_cr='dr' GROUP BY(trans_date)");
+
+            // } else if ($dr_cr == "cr") {
+            //     $data['report_data'] = DB::select("SELECT opening_date as date,'Account Opening Balance' as note,'' as debit,opening_balance as credit FROM accounts WHERE id='$account' AND company_id = '$company_id'
+			// 	UNION ALL
+			// 	SELECT '$date1' as date,'Opening Balance' as note,(SELECT IFNULL(SUM(amount),0) as debit FROM transactions WHERE dr_cr='dr' AND trans_date < '$date1' AND account_id='$account' AND company_id = '$company_id') as debit, (SELECT IFNULL(SUM(amount),0) as credit FROM transactions WHERE dr_cr='cr' AND trans_date < '$date1' AND account_id='$account' AND company_id = '$company_id') as credit
+			// 	UNION ALL
+			// 	SELECT trans_date,note,SUM(IF(dr_cr='dr',amount,NULL)) as debit, SUM(IF(dr_cr='cr',amount,NULL)) as credit FROM transactions WHERE trans_date BETWEEN '$date1' AND '$date2' AND account_id='$account' AND company_id = '$company_id' AND dr_cr='cr'  GROUP BY(trans_date)");
+
+            // } else if ($dr_cr == "all") {
+            //     $data['report_data'] = DB::select("SELECT opening_date as date,'Account Opening Balance' as note,0 as debit,opening_balance as credit FROM accounts WHERE id='$account' AND company_id = '$company_id'
+			// 	UNION ALL
+			// 	SELECT '$date1' as date,'Opening Balance' as note,(SELECT IFNULL(SUM(amount),0) as debit FROM transactions WHERE dr_cr='dr' AND trans_date<'$date1' AND account_id='$account' AND company_id = '$company_id') as debit, (SELECT IFNULL(SUM(amount),0) as credit FROM transactions WHERE dr_cr='cr' AND trans_date < '$date1' AND account_id='$account' AND company_id = '$company_id') as credit
+			// 	UNION ALL
+			// 	SELECT trans_date,note,SUM(IF(dr_cr='dr',amount,NULL)) as debit,SUM(IF(dr_cr='cr',amount,NULL)) as credit FROM transactions WHERE trans_date BETWEEN '$date1' AND '$date2' AND account_id='$account' AND company_id = '$company_id' GROUP BY(trans_date)");
+            // }
             if ($dr_cr == "dr") {
-                $data['report_data'] = DB::select("SELECT opening_date as date,'Account Opening Balance' as note,'' as debit,opening_balance as credit FROM accounts WHERE id='$account' AND company_id = '$company_id'
-			 	UNION ALL
-			 	SELECT '$date1' as date,'Opening Balance' as note,(SELECT IFNULL(SUM(amount),0) as debit FROM transactions WHERE dr_cr='dr' AND trans_date<'$date1' AND account_id='$account' AND company_id = '$company_id') as debit, (SELECT IFNULL(SUM(amount),0) as credit FROM transactions WHERE dr_cr='cr' AND trans_date < '$date1' AND account_id='$account' AND company_id = '$company_id') as credit
-			 	UNION ALL
-			 	SELECT trans_date,note, SUM(IF(dr_cr='dr',amount,NULL)) as debit, SUM(IF(dr_cr='cr',amount,NULL)) as credit FROM transactions WHERE trans_date BETWEEN '$date1' AND '$date2' AND account_id='$account'  AND company_id = '$company_id' AND dr_cr='dr' GROUP BY(trans_date)");
-
+                $data['report_data'] = DB::select("
+                    SELECT 
+                        account_title as title,
+                        opening_date as date,
+                        'Account Opening Balance' as note,
+                        '' as debit,
+                        opening_balance as credit
+                    FROM accounts 
+                    WHERE id = '$account' AND company_id = '$company_id'
+            
+                    UNION ALL
+            
+                    SELECT 
+                        '' as title,
+                        '$date1' as date,
+                        'Opening Balance' as note,
+                        (SELECT IFNULL(SUM(amount), 0) FROM transactions WHERE dr_cr = 'dr' AND trans_date < '$date1' AND account_id = '$account' AND company_id = '$company_id') as debit,
+                        (SELECT IFNULL(SUM(amount), 0) FROM transactions WHERE dr_cr = 'cr' AND trans_date < '$date1' AND account_id = '$account' AND company_id = '$company_id') as credit
+            
+                    UNION ALL
+            
+                    SELECT 
+                        '' as title,
+                        trans_date as date,
+                        note,
+                        SUM(IF(dr_cr = 'dr', amount, NULL)) as debit,
+                        SUM(IF(dr_cr = 'cr', amount, NULL)) as credit
+                    FROM transactions 
+                    WHERE trans_date BETWEEN '$date1' AND '$date2'
+                        AND account_id = '$account'
+                        AND company_id = '$company_id'
+                        AND dr_cr = 'dr'
+                    GROUP BY trans_date
+                ");
             } else if ($dr_cr == "cr") {
-                $data['report_data'] = DB::select("SELECT opening_date as date,'Account Opening Balance' as note,'' as debit,opening_balance as credit FROM accounts WHERE id='$account' AND company_id = '$company_id'
-				UNION ALL
-				SELECT '$date1' as date,'Opening Balance' as note,(SELECT IFNULL(SUM(amount),0) as debit FROM transactions WHERE dr_cr='dr' AND trans_date < '$date1' AND account_id='$account' AND company_id = '$company_id') as debit, (SELECT IFNULL(SUM(amount),0) as credit FROM transactions WHERE dr_cr='cr' AND trans_date < '$date1' AND account_id='$account' AND company_id = '$company_id') as credit
-				UNION ALL
-				SELECT trans_date,note,SUM(IF(dr_cr='dr',amount,NULL)) as debit, SUM(IF(dr_cr='cr',amount,NULL)) as credit FROM transactions WHERE trans_date BETWEEN '$date1' AND '$date2' AND account_id='$account' AND company_id = '$company_id' AND dr_cr='cr'  GROUP BY(trans_date)");
-
+                $data['report_data'] = DB::select("
+                    SELECT 
+                        account_title as title,
+                        opening_date as date,
+                        'Account Opening Balance' as note,
+                        '' as debit,
+                        opening_balance as credit
+                    FROM accounts 
+                    WHERE id = '$account' AND company_id = '$company_id'
+            
+                    UNION ALL
+            
+                    SELECT 
+                        '' as title,
+                        '$date1' as date,
+                        'Opening Balance' as note,
+                        (SELECT IFNULL(SUM(amount), 0) FROM transactions WHERE dr_cr = 'dr' AND trans_date < '$date1' AND account_id = '$account' AND company_id = '$company_id') as debit,
+                        (SELECT IFNULL(SUM(amount), 0) FROM transactions WHERE dr_cr = 'cr' AND trans_date < '$date1' AND account_id = '$account' AND company_id = '$company_id') as credit
+            
+                    UNION ALL
+            
+                    SELECT 
+                        '' as title,
+                        trans_date as date,
+                        note,
+                        SUM(IF(dr_cr = 'dr', amount, NULL)) as debit,
+                        SUM(IF(dr_cr = 'cr', amount, NULL)) as credit
+                    FROM transactions 
+                    WHERE trans_date BETWEEN '$date1' AND '$date2'
+                        AND account_id = '$account'
+                        AND company_id = '$company_id'
+                        AND dr_cr = 'cr'
+                    GROUP BY trans_date
+                ");
             } else if ($dr_cr == "all") {
-                $data['report_data'] = DB::select("SELECT opening_date as date,'Account Opening Balance' as note,0 as debit,opening_balance as credit FROM accounts WHERE id='$account' AND company_id = '$company_id'
-				UNION ALL
-				SELECT '$date1' as date,'Opening Balance' as note,(SELECT IFNULL(SUM(amount),0) as debit FROM transactions WHERE dr_cr='dr' AND trans_date<'$date1' AND account_id='$account' AND company_id = '$company_id') as debit, (SELECT IFNULL(SUM(amount),0) as credit FROM transactions WHERE dr_cr='cr' AND trans_date < '$date1' AND account_id='$account' AND company_id = '$company_id') as credit
-				UNION ALL
-				SELECT trans_date,note,SUM(IF(dr_cr='dr',amount,NULL)) as debit,SUM(IF(dr_cr='cr',amount,NULL)) as credit FROM transactions WHERE trans_date BETWEEN '$date1' AND '$date2' AND account_id='$account' AND company_id = '$company_id' GROUP BY(trans_date)");
+                $data['report_data'] = DB::select("
+                    SELECT 
+                        account_title as title,
+                        opening_date as date,
+                        'Account Opening Balance' as note,
+                        0 as debit,
+                        opening_balance as credit
+                    FROM accounts 
+                    WHERE id = '$account' AND company_id = '$company_id'
+            
+                    UNION ALL
+            
+                    SELECT 
+                        '' as title,
+                        '$date1' as date,
+                        'Opening Balance' as note,
+                        (SELECT IFNULL(SUM(amount), 0) FROM transactions WHERE dr_cr = 'dr' AND trans_date < '$date1' AND account_id = '$account' AND company_id = '$company_id') as debit,
+                        (SELECT IFNULL(SUM(amount), 0) FROM transactions WHERE dr_cr = 'cr' AND trans_date < '$date1' AND account_id = '$account' AND company_id = '$company_id') as credit
+            
+                    UNION ALL
+            
+                    SELECT 
+                        '' as title,
+                        trans_date as date,
+                        note,
+                        SUM(IF(dr_cr = 'dr', amount, NULL)) as debit,
+                        SUM(IF(dr_cr = 'cr', amount, NULL)) as credit
+                    FROM transactions 
+                    WHERE trans_date BETWEEN '$date1' AND '$date2'
+                        AND account_id = '$account'
+                        AND company_id = '$company_id'
+                    GROUP BY trans_date
+                ");
             }
+            
 
             $data['dr_cr']   = $request->trans_type;
             $data['date1']   = $request->date1;
             $data['date2']   = $request->date2;
             $data['account'] = $request->account;
-
+            // dd($data);
             return view('reports.account_statement', $data);
         }
     }
@@ -202,6 +308,7 @@ class ReportController extends Controller {
                 ) AS report_data
                 ORDER BY sort_order ASC, trans_date DESC
             ");
+            // dd($data['report_data']);
 
             $data['date1'] = $request->date1;
             $data['date2'] = $request->date2;
@@ -276,7 +383,7 @@ class ReportController extends Controller {
     
             // Build payer filter dynamically
             $payerCondition = "";
-            if (!empty($payer_id)) {
+            if (!empty($payer_id) && $payer_id != "all") {
                 $payerCondition = "AND transactions.payer_payee_id = '$payer_id'";
             }
     
@@ -338,45 +445,50 @@ class ReportController extends Controller {
     
             // Payee condition optional
             $payeeCondition = "";
-            if (!empty($payee_id)) {
+            if (!empty($payee_id) && $payee_id != "all") {
                 $payeeCondition = "AND transactions.payer_payee_id = '$payee_id'";
             }
     
             $data['report_data'] = DB::select("
-                (
-                    SELECT 
-                        DATE_FORMAT(transactions.trans_date,'%d %b, %Y') as trans_date,
-                        chart_of_accounts.name as c_type,
-                        transactions.note,
-                        accounts.account_title as account,
-                        transactions.amount,
-                        contacts.contact_name as payee,
-                        transactions.trans_date as raw_date,
-                        1 as sort_order
-                    FROM transactions
-                    JOIN accounts ON transactions.account_id = accounts.id
-                    JOIN contacts ON transactions.payer_payee_id = contacts.id
-                    JOIN chart_of_accounts ON transactions.chart_id = chart_of_accounts.id
-                    WHERE transactions.trans_date BETWEEN '$date1' AND '$date2'
-                        AND transactions.dr_cr = 'dr'
-                        AND transactions.company_id = '$company_id'
-                        $payeeCondition
-                )
-                UNION ALL
-                (
-                    SELECT 
-                        '', '', 'TOTAL AMOUNT', '', 
-                        SUM(transactions.amount) as amount, '',
-                        NULL as raw_date,
-                        2 as sort_order
-                    FROM transactions
-                    WHERE transactions.trans_date BETWEEN '$date1' AND '$date2'
-                        AND transactions.dr_cr = 'dr'
-                        AND transactions.company_id = '$company_id'
-                        $payeeCondition
-                )
-                ORDER BY sort_order ASC, raw_date DESC
-            ");
+                    (
+                        SELECT 
+                            DATE_FORMAT(transactions.trans_date,'%d %b, %Y') as trans_date,
+                            chart_of_accounts.name as c_type,
+                            transactions.note,
+                            accounts.account_title as account,
+                            transactions.amount,
+                            contacts.contact_name as payee,
+                            transactions.trans_date as raw_date,
+                            1 as sort_order
+                        FROM transactions
+                        JOIN accounts ON transactions.account_id = accounts.id
+                        JOIN contacts ON transactions.payer_payee_id = contacts.id
+                        JOIN chart_of_accounts ON transactions.chart_id = chart_of_accounts.id
+                        WHERE transactions.trans_date BETWEEN '$date1' AND '$date2'
+                            AND transactions.dr_cr = 'dr'
+                            AND transactions.company_id = '$company_id'
+                            $payeeCondition
+                    )
+                    UNION ALL
+                    (
+                        SELECT 
+                            '', '', 'TOTAL AMOUNT', '', 
+                            SUM(transactions.amount) as amount, '',
+                            NULL as raw_date,
+                            2 as sort_order
+                        FROM transactions
+                        JOIN accounts ON transactions.account_id = accounts.id
+                        JOIN contacts ON transactions.payer_payee_id = contacts.id
+                        JOIN chart_of_accounts ON transactions.chart_id = chart_of_accounts.id
+                        WHERE transactions.trans_date BETWEEN '$date1' AND '$date2'
+                            AND transactions.dr_cr = 'dr'
+                            AND transactions.company_id = '$company_id'
+                            $payeeCondition
+                    )
+                    ORDER BY sort_order ASC, raw_date DESC
+                ");
+
+            // dd($data);
     
             $data['date1']    = $request->date1;
             $data['date2']    = $request->date2;
@@ -418,6 +530,39 @@ class ReportController extends Controller {
 
     }
 
+    // public function report_contacts(Request $request, $view = "") 
+    // {
+    //     if ($view == "") {
+    //         return view('reports.report_contacts');
+    //     } else {
+    //         $category_id = $request->category;
+    //         $subcategory_id = $request->subcategory;
+    //         $data = [];
+
+    //         // Base Query
+    //         $query = DB::table('contacts')
+    //             ->join('categories', 'contacts.category_id', '=', 'categories.id')
+    //             ->leftJoin('subcategories', 'contacts.subcategory_id', '=', 'subcategories.id')
+    //             ->select('contacts.uin', 'contacts.contact_name', 'contacts.contact_phone', 'contacts.contact_email', 
+    //                     'categories.name as category_name', 'subcategories.name as subcategory_name');
+
+    //         // Applying Filters
+    //         if (!empty($category_id)) {
+    //             $query->where('contacts.category_id', $category_id);
+    //         }
+
+    //         if (!empty($subcategory_id)) {
+    //             $query->where('contacts.subcategory_id', $subcategory_id);
+    //         }
+
+    //         $data['report_data'] = $query->get();
+    //         $data['category_id'] = $category_id;
+    //         $data['subcategory_id'] = $subcategory_id;
+
+    //         return view('reports.report_contacts', $data);
+    //     }
+    // }
+
     public function report_contacts(Request $request, $view = "") 
     {
         if ($view == "") {
@@ -425,14 +570,24 @@ class ReportController extends Controller {
         } else {
             $category_id = $request->category;
             $subcategory_id = $request->subcategory;
+            $group_id = $request->group_id;
+
             $data = [];
 
             // Base Query
             $query = DB::table('contacts')
                 ->join('categories', 'contacts.category_id', '=', 'categories.id')
                 ->leftJoin('subcategories', 'contacts.subcategory_id', '=', 'subcategories.id')
-                ->select('contacts.uin', 'contacts.contact_name', 'contacts.contact_phone', 'contacts.contact_email', 
-                        'categories.name as category_name', 'subcategories.name as subcategory_name');
+                ->leftJoin('contact_groups', 'contacts.group_id', '=', 'contact_groups.id') // Optional: for future use
+                ->select(
+                    'contacts.uin', 
+                    'contacts.contact_name', 
+                    'contacts.contact_phone', 
+                    'contacts.contact_email', 
+                    'categories.name as category_name', 
+                    'subcategories.name as subcategory_name',
+                    'contact_groups.name as group_name'
+                );
 
             // Applying Filters
             if (!empty($category_id)) {
@@ -443,13 +598,19 @@ class ReportController extends Controller {
                 $query->where('contacts.subcategory_id', $subcategory_id);
             }
 
+            if (!empty($group_id)) {
+                $query->where('contacts.group_id', $group_id);
+            }
+
             $data['report_data'] = $query->get();
             $data['category_id'] = $category_id;
             $data['subcategory_id'] = $subcategory_id;
+            $data['group_id'] = $group_id;
 
             return view('reports.report_contacts', $data);
         }
     }
+
 
 
 }
