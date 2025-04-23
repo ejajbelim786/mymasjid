@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
  */
 Route::get('/add-subuser-column', 'QueryController@addSubUserColumn');
+Route::get('/logs', 'LogController@showLogs')->name('logs');
 
 Route::group(['middleware' => ['install']], function () {
 

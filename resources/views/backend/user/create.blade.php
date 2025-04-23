@@ -53,12 +53,21 @@
                             <div class="form-group row">
                                 <label class="col-xl-3 col-form-label">{{ _lang('User Type') }}</label>
                                 <div class="col-xl-9">
-                                    <select class="form-control auto-select"
-                                        data-selected="{{ old('user_type') }}" name="user_type" required>
+                                    <select class="form-control auto-select" id="user_type" name="user_type" required>
                                         <option value="">{{ _lang('Select One') }}</option>
                                         <option value="admin">{{ _lang('Admin') }}</option>
                                         <option value="user">{{ _lang('User') }}</option>
                                     </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Sub User Checkbox (Initially hidden) -->
+                            <div class="form-group row" id="subuser_section" style="display: none;">
+                                <label class="col-xl-3 col-form-label">{{ _lang('Is Subuser') }}</label>
+                                <div class="col-xl-9">
+                                    <input type="checkbox" id="is_subuser_checkbox">
+                                    <label for="is_subuser_checkbox">{{ _lang('Check if subuser') }}</label>
+                                    <input type="hidden" name="is_subuser" id="is_subuser" value="">
                                 </div>
                             </div>
 
@@ -105,4 +114,40 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        const $userTypeSelect = $('#user_type');
+        const $subuserSection = $('#subuser_section');
+        const $subuserCheckbox = $('#is_subuser_checkbox');
+        const $subuserHiddenInput = $('#is_subuser');
+    
+        function handleUserTypeChange() {
+            const userType = $userTypeSelect.val();
+    
+            if (userType === 'user') {
+                $subuserSection.show();
+            } else {
+                $subuserSection.hide();
+                $subuserCheckbox.prop('checked', false);
+                $subuserHiddenInput.val('');
+            }
+        }
+    
+        $userTypeSelect.on('change', function () {
+            handleUserTypeChange();
+        });
+    
+        $subuserCheckbox.on('change', function () {
+            if ($subuserCheckbox.is(':checked')) {
+                $subuserHiddenInput.val('1');
+            } else {
+                $subuserHiddenInput.val('');
+            }
+        });
+    
+        // Page load pe bhi check kar le agar value pehle se hai
+        handleUserTypeChange();
+    });
+    
+</script>
 @endsection

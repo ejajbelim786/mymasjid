@@ -30,13 +30,13 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            {{--  <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">{{ _lang('Contact Email') }}</label>
                     <input type="text" class="form-control" name="contact_email" value="{{ old('contact_email') }}"
                         required>
                 </div>
-            </div>
+            </div>  --}}
 
             <div class="col-md-6">
                 <div class="form-group">

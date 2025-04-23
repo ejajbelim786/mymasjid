@@ -43,13 +43,13 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        {{--  <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">{{ _lang('Member Email') }}</label>
                                 <input type="text" class="form-control" name="contact_email"
                                     value="{{ old('contact_email') }}" required>
                             </div>
-                        </div>
+                        </div>  --}}
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -156,8 +156,10 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-12 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg"><i class="ti-save"></i> {{ _lang('Save Member') }}</button>
+            </div>
         </div>
-
         <div class="col-md-4">
             <div class="card mb-4">
                 <div class="card-header">
@@ -232,9 +234,9 @@
             @endif
         </div>
 
-        <div class="col-md-12 mt-4">
+        {{--  <div class="col-md-12 mt-4">
             <button type="submit" class="btn btn-primary btn-lg"><i class="ti-save"></i> {{ _lang('Save Member') }}</button>
-        </div>
+        </div>  --}}
 
     </div>
 </form>

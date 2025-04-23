@@ -14,8 +14,8 @@
                         class="ti-file"></i> {{ _lang('Quotations') }}</a></li>
             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#transaction"><i
                         class="ti-credit-card"></i> {{ _lang('Transactions') }}</a></li>
-            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#email"><i
-                        class="ti-email"></i> {{ _lang('Email') }}</a> </li>
+            {{--  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#email"><i
+                        class="ti-email"></i> {{ _lang('Email') }}</a> </li>  --}}
             <li class="nav-item"><a class="nav-link" href="{{ route('contacts.edit', $contact->id) }}"><i
                         class="ti-pencil-alt"></i> {{ _lang('Edit') }}</a> </li>
         </ul>
@@ -53,10 +53,10 @@
                                 <td>{{ _lang('Member Name') }}</td>
                                 <td>{{ $contact->contact_name }}</td>
                             </tr>
-                            <tr>
+                            {{--  <tr>
                                 <td>{{ _lang('Member Email') }}</td>
                                 <td>{{ $contact->contact_email }}</td>
-                            </tr>
+                            </tr>  --}}
                             <tr>
                                 <td>{{ _lang('Member Phone') }}</td>
                                 <td>{{ $contact->contact_phone }}</td>

@@ -41,12 +41,28 @@ class ProfileController extends Controller {
         $profile        = Auth::user();
         $profile->name  = $request->name;
         $profile->email = $request->email;
+        // if ($request->hasFile('profile_picture')) {
+        //     $image     = $request->file('profile_picture');
+        //     $file_name = "profile_" . time() . '.' . $image->getClientOriginalExtension();
+        //     Image::make($image)->crop(300, 300)->save(base_path('public/uploads/profile/') . $file_name);
+        //     $profile->profile_picture = $file_name;
+        // }
         if ($request->hasFile('profile_picture')) {
             $image     = $request->file('profile_picture');
             $file_name = "profile_" . time() . '.' . $image->getClientOriginalExtension();
-            Image::make($image)->crop(300, 300)->save(base_path('public/uploads/profile/') . $file_name);
-            $profile->profile_picture = $file_name;
+        
+            $storagePath = storage_path('app/public/uploads/profile/');
+            if (!file_exists($storagePath)) {
+                mkdir($storagePath, 0777, true); // folder create if not exists
+            }
+        
+            Image::make($image)
+                ->crop(300, 300)
+                ->save($storagePath . $file_name);
+        
+            $profile->profile_picture = 'uploads/profile/' . $file_name;
         }
+        
 
         $profile->save();
 

@@ -52,6 +52,7 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'name'            => 'required|max:255',
             'email'           => 'required|email|unique:users|max:255',

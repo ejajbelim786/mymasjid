@@ -49,14 +49,6 @@
 
 				{
 
-					data: "contact_email",
-
-					name: "contact_email"
-
-				},
-
-				{
-
 					data: "contact_phone",
 
 					name: "contact_phone"

@@ -19,7 +19,7 @@
                             <th>{{ _lang('Unique Member ID') }}</th>
                             <th>{{ _lang('Profile Type') }}</th>
                             <th>{{ _lang('Member Name') }}</th>
-                            <th>{{ _lang('Email') }}</th>
+                            {{--  <th>{{ _lang('Email') }}</th>  --}}
                             <th>{{ _lang('Phone') }}</th>
                             <th>{{ _lang('Category') }}</th>
                             <th>{{ _lang('Sub Category') }}</th>

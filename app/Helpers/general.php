@@ -525,7 +525,7 @@ if (!function_exists('profile_picture')) {
 
 
 
-        return asset('uploads/profile/' . $profile_picture);
+        return asset('storage/' .  $profile_picture);
 
     }
 

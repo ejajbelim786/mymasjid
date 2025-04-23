@@ -13,6 +13,7 @@
 			serverSide: true,
 
 			ajax: _url + '/income/get_table_data',
+			
 
 			"columns": [
 
@@ -55,13 +56,15 @@
 					name: "payer.contact_name"
 
 				},
-				{
+				// {
 
-					data: "payer.uin",
+				// 	data: "payer.uin",
 
-					name: "payer.uin"
+				// 	name: "payer.uin"
 
-				},
+				// },
+				{ data: "payer.uin", name: "payer.uin", defaultContent: "" },
+
 
 				{
 

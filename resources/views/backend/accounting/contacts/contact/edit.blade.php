@@ -46,13 +46,13 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        {{--  <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">{{ _lang('Member Email') }}</label>
                                 <input type="text" class="form-control" name="contact_email"
                                     value="{{ $contact->contact_email }}" required>
                             </div>
-                        </div>
+                        </div>  --}}
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -168,6 +168,10 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-12 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg"><i class="ti-save"></i>
+                    {{ _lang('Update Contact') }}</button>
+            </div>
         </div>
 
         <div class="col-md-4">
@@ -246,10 +250,10 @@
             </div>
         </div>
 
-        <div class="col-md-12 mt-4">
+        {{--  <div class="col-md-12 mt-4">
             <button type="submit" class="btn btn-primary btn-lg"><i class="ti-save"></i>
                 {{ _lang('Update Contact') }}</button>
-        </div>
+        </div>  --}}
     </div>
 </form>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
